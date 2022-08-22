@@ -1,0 +1,13 @@
+{
+    "keys":[
+        {
+            "kty":"RSA",
+            "kid":"U-P9baIkQLWA5tYLnpqvo-DLr5-j10R8JnCbjxNe_UI",
+            "n":"_Mk2ptkz6IYyhDTdHeDU2dhC00C4--GFii_UfMS2NH4wJkO4DTx2zutkbfOP5stl3fz6c17iBDSZC7D18cjiEMLX6dthunjOsxjsNErC0P138udt_DaA-xusiHYBN3xNqHtNCxrqfa0FsHZZmVqaiImHgc3r92lNIoymIeZjQe1njD_HiQcJrUx-WeeP_kECPmxCN9wHE2FY85GDtIPNtVnSG1-Qh46ILlGanXlAjTbAVcuu8Xu3yB-XF8TgfrnfxXyywILEWF94AromswjW4XEWkk4gVFhtbnyNjri16LPXDMqwqdE3YVeDGJ7FYabVZ_-g7uMQ5gKiQJLG0hWNf0r57vgLTw7PvoMbmvytGocpYX9sowI1EQlaojA3DBFdPEsAPZGgOmM2ZIKARiqg8ujTn3AQCqcYj9YCLasYHJCirqXWLC-KNZIrtb9cM9SjSEQQhDsgO6XNtmwYjBgxcauKTniLZu2j2ujwVlbWCRv3V4d-LoqVuKdRE6gdCJK9SD6UkAez6s9XPLXysMii2p_wCZUCeutA2HijP67avHrU3IJyQEMgeE8cevKLMDG7695yXyGr_SfWXwkKq7CfBl-xYGew8r9ev_n6ep43Z1xnt2s2BwtX3amY4LvpedR5EprMwgvzWIj5BUV4rkNTOVI9JNHumY7wfJ2D-qaqTVU",
+            "e":"AQAB",
+            "x5c": [
+                "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA/Mk2ptkz6IYyhDTdHeDU2dhC00C4++GFii/UfMS2NH4wJkO4DTx2zutkbfOP5stl3fz6c17iBDSZC7D18cjiEMLX6dthunjOsxjsNErC0P138udt/DaA+xusiHYBN3xNqHtNCxrqfa0FsHZZmVqaiImHgc3r92lNIoymIeZjQe1njD/HiQcJrUx+WeeP/kECPmxCN9wHE2FY85GDtIPNtVnSG1+Qh46ILlGanXlAjTbAVcuu8Xu3yB+XF8TgfrnfxXyywILEWF94AromswjW4XEWkk4gVFhtbnyNjri16LPXDMqwqdE3YVeDGJ7FYabVZ/+g7uMQ5gKiQJLG0hWNf0r57vgLTw7PvoMbmvytGocpYX9sowI1EQlaojA3DBFdPEsAPZGgOmM2ZIKARiqg8ujTn3AQCqcYj9YCLasYHJCirqXWLC+KNZIrtb9cM9SjSEQQhDsgO6XNtmwYjBgxcauKTniLZu2j2ujwVlbWCRv3V4d+LoqVuKdRE6gdCJK9SD6UkAez6s9XPLXysMii2p/wCZUCeutA2HijP67avHrU3IJyQEMgeE8cevKLMDG7695yXyGr/SfWXwkKq7CfBl+xYGew8r9ev/n6ep43Z1xnt2s2BwtX3amY4LvpedR5EprMwgvzWIj5BUV4rkNTOVI9JNHumY7wfJ2D+qaqTVUCAwEAAQ=="
+            ]
+        }
+    ]
+}
