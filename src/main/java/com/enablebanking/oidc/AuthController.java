@@ -1,16 +1,10 @@
 package com.enablebanking.oidc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -20,9 +14,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-
-    @Value("classpath:certs/keys.jwks")
-    Resource jwks;
 
     @SneakyThrows
     @GetMapping("/auth")
@@ -80,8 +71,6 @@ public class AuthController {
     @SneakyThrows
     @GetMapping("/jwks")
     public JWKS jwks() {
-        Reader reader = new InputStreamReader(jwks.getInputStream(), UTF_8);
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(FileCopyUtils.copyToString(reader), JWKS.class);
+        return authService.getJwks();
     }
 }
