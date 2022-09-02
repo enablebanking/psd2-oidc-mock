@@ -6,21 +6,31 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final ServiceConfiguration serviceConfiguration;
-    private final String resourcePath = "src/main/resources/";
+
+    @Value("classpath:certs/private_key.der")
+    private Resource privateKey;
+
+    @Value("classpath:certs/keys.jwks")
+    private Resource jwks;
 
     public boolean isClientIdValid(String clientId) {
         return serviceConfiguration.getClientId().equals(clientId);
@@ -31,8 +41,8 @@ public class AuthService {
     }
 
     @SneakyThrows
-    private static PrivateKey getPrivateKey(String filename) {
-        byte[] key = Files.readAllBytes(Paths.get(filename));
+    private PrivateKey getPrivateKey() {
+        byte[] key = FileCopyUtils.copyToByteArray(privateKey.getInputStream());
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
         return kf.generatePrivate(keySpec);
@@ -67,10 +77,10 @@ public class AuthService {
     }
 
     @SneakyThrows
-    private JWKS getJwks() {
-        String jwksPath = resourcePath + serviceConfiguration.getJwksPath();
+    public JWKS getJwks() {
+        Reader reader = new InputStreamReader(jwks.getInputStream(), UTF_8);
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(Files.readAllBytes(Paths.get(jwksPath)), JWKS.class);
+        return mapper.readValue(FileCopyUtils.copyToString(reader), JWKS.class);
     }
 
     @SneakyThrows
@@ -81,7 +91,7 @@ public class AuthService {
 
     @SneakyThrows
     public String generateIdToken(String nonce, Boolean isPsd2, String psuId) {
-        PrivateKey privateKey = getPrivateKey(resourcePath + serviceConfiguration.getPrivateKeyPath());
+        PrivateKey privateKey = getPrivateKey();
         return Jwts
                 .builder()
                 .setHeaderParam("kid", getKid())
