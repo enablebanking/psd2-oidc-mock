@@ -13,6 +13,11 @@ web service providing PSD2 APIs shall (1) get ID token from the `id_token` param
 Connect provider, (2) verify the ID token, and (3) use value of the `psu` claim for internal identification of the end-user and presentation of
 PSU consent details.
 
+The following flow diagram shows use of an OpenID Connect provider for an end-user authentication in the account information consent flow of the Berlin
+Group NextGenPSD2 specification (aka XS2A).
+
+![This is an image](docs/assets/NextGenPSD2%20ASPSP%20AIS%20auth%20flow%20diagram.svg)
+
 ## ID token body claims
  
 `iss` Issuer Identifier for the Issuer of the response. The iss value is a case sensitive URL using the https scheme that contains scheme, host, and
