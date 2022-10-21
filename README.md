@@ -13,6 +13,8 @@ web service providing PSD2 APIs shall (1) get ID token from the `id_token` param
 Connect provider, (2) verify the ID token, and (3) use value of the `psu` claim for internal identification of the end-user and presentation of
 PSU consent details.
 
+This implementation currently allows only one client ID and redirect URI.
+
 The following flow diagram shows use of an OpenID Connect provider for an end-user authentication in the account information consent flow of the Berlin
 Group NextGenPSD2 specification (aka XS2A).
 
@@ -51,13 +53,13 @@ number or similar).
 
 You can modify `src/main/resources/application.properties` file to change different application settings:     
 
-`privateKeyPath` - path to private key file  
+`privateKeyPath` - path to the file containing private RSA key in DER format. This key is used for signing of ID tokens.
 
 `jwksPath` - path to jwks file (used for verification of id_token by a third party)  
 
-`clientId` - client id ("aud" claim in id_token)  
+`clientId` - allowed client ID (the same value will be set in the "aud" claim of the generated id_token)
 
-`redirectUri` - redirect uri (URI where a PSU is redirected after authorization)  
+`redirectUri` - allowed redirect URI (i.e. the URI where an end-user will be redirected after authorization)  
 
 `issuer` - issuer ("iss" claim in id_token)  
 
