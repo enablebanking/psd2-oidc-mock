@@ -24,7 +24,7 @@ public class AuthController {
             @RequestParam(value = "redirect_uri") String redirectUri,
             @RequestParam(value = "scope") String scope,
             @RequestParam(value = "nonce") String nonce,
-            @RequestParam(value = "state", required = false) String state
+            @RequestParam(value = "state") String state
     ) {
         if (!"id_token".equals(responseType)) {
             return new RedirectView(redirectUri + "?error=unsupported_response_type");
@@ -38,11 +38,6 @@ public class AuthController {
         List<String> scopes = List.of(scope.split(" "));
         if (!scopes.contains("openid")) {
             return new RedirectView(redirectUri + "?error=access_denied&error_description=" + URLEncoder.encode("scope \"openid\" is not present", UTF_8));
-        }
-
-        if (state == null) {
-            // If state is not provided then generate a random one to avoid breaking the flow
-            state = authService.generateState();
         }
 
         return new RedirectView("/selectAccount" + "?nonce=" + nonce + "&redirect_uri=" + redirectUri + "&isPsd2=" + scopes.contains("psd2") + "&state=" + state);

@@ -18,7 +18,6 @@ import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
-import java.util.UUID;
 
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -100,10 +99,5 @@ public class AuthService {
                 .setClaims(getClaims(nonce, isPsd2, psuId))
                 .signWith(privateKey, SignatureAlgorithm.PS256)
                 .compact();
-    }
-
-    public String generateState() {
-        // generate UUID
-        return UUID.randomUUID().toString();
     }
 }
