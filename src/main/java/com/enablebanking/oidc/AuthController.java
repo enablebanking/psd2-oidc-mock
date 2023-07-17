@@ -8,6 +8,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.net.URLEncoder;
 import java.util.List;
 
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @RestController
@@ -22,7 +23,9 @@ public class AuthController {
             @RequestParam(value = "client_id") String clientId,
             @RequestParam(value = "redirect_uri") String redirectUri,
             @RequestParam(value = "scope") String scope,
-            @RequestParam(value = "nonce") String nonce) {
+            @RequestParam(value = "nonce") String nonce,
+            @RequestParam(value = "state", required = false) String state
+    ) {
         if (!"id_token".equals(responseType)) {
             return new RedirectView(redirectUri + "?error=unsupported_response_type");
         }
@@ -37,27 +40,45 @@ public class AuthController {
             return new RedirectView(redirectUri + "?error=access_denied&error_description=" + URLEncoder.encode("scope \"openid\" is not present", UTF_8));
         }
 
-        return new RedirectView("/selectAccount" + "?nonce=" + nonce + "&redirect_uri=" + redirectUri + "&isPsd2=" + scopes.contains("psd2"));
+        if (state == null) {
+            // If state is not provided then generate a random one to avoid breaking the flow
+            state = authService.generateState();
+        }
+
+        return new RedirectView("/selectAccount" + "?nonce=" + nonce + "&redirect_uri=" + redirectUri + "&isPsd2=" + scopes.contains("psd2") + "&state=" + state);
     }
 
     @GetMapping("/selectAccount")
     public String selectAccount(
             @RequestParam(value = "nonce") String nonce,
             @RequestParam(value = "redirect_uri") String redirectUri,
-            @RequestParam(value = "isPsd2") boolean isPsd2
+            @RequestParam(value = "isPsd2") boolean isPsd2,
+            @RequestParam(value = "state") String state
     ) {
-        return "<html><body><p>Please provide account id</p><form action=\"/selectAccount\" method=\"post\">" +
-                "<input type=\"hidden\" name=\"redirectUri\" value=\"" + redirectUri + "\" />" +
-                "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" />" +
-                "<input type=\"hidden\" name=\"isPsd2\" value=\"" + isPsd2 + "\" />" +
-                "<input type=\"text\" name=\"psuId\" required />" +
-                "<input type=\"submit\" value=\"Submit\" />" +
-                "</form></body></html>";
+        return "<html>" +
+                    "<body>" +
+                        "<p>Please provide account id</p>" +
+                        "<form action=\"/selectAccount\" method=\"post\">" +
+                            "<input type=\"hidden\" name=\"redirectUri\" value=\"" + redirectUri + "\" />" +
+                            "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" />" +
+                            "<input type=\"hidden\" name=\"isPsd2\" value=\"" + isPsd2 + "\" />" +
+                            "<input type=\"hidden\" name=\"state\" value=\"" + state + "\" />" +
+                            "<input type=\"text\" name=\"psuId\" required />" +
+                            "<input type=\"submit\" value=\"Submit\" />" +
+                        "</form>" +
+                        "<form action=\"/cancel\" method=\"post\">" +
+                            "<input type=\"hidden\" name=\"redirectUri\" value=\"" + redirectUri + "\" />" +
+                            "<input type=\"hidden\" name=\"state\" value=\"" + state + "\" />" +
+                            "<input type=\"submit\" value=\"Cancel\" />" +
+                        "</form>" +
+                    "</body>" +
+                "</html>";
     }
 
     @PostMapping("/selectAccount")
     public RedirectView selectAccount(
-            @ModelAttribute SelectUserModel selectUserModel
+            @ModelAttribute SelectUserModel selectUserModel,
+            @RequestParam(value = "state") String state
     ) {
         return new RedirectView(
                 selectUserModel.getRedirectUri() +
@@ -65,7 +86,18 @@ public class AuthController {
                         authService.generateIdToken(
                                 selectUserModel.getNonce(),
                                 selectUserModel.getIsPsd2(),
-                                selectUserModel.getPsuId()));
+                                selectUserModel.getPsuId()) + "&state=" + state);
+    }
+
+    @PostMapping("/cancel")
+    public RedirectView cancel(
+            @ModelAttribute CancelModel cancelModel,
+            @RequestParam(value = "state") String state
+    ) {
+        return new RedirectView(
+                cancelModel.getRedirectUri() +
+                        "?error=access_denied" +
+                        "&state=" + state);
     }
 
     @SneakyThrows

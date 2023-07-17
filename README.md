@@ -66,3 +66,12 @@ You can modify `src/main/resources/application.properties` file to change differ
 `salt` - salt for hashing PSU's id (hashed PSU id is used as "sub" claim in id_token)  
 
 There are also certificates used by the service under `src/main/resources/certs` folder.
+
+## Running service locally:
+`./gradlew bootRun`
+
+## Building and running Docker image:
+### Build image:
+`docker build -t oidcmock .`
+### Run image:
+`docker run -p 8080:8080 oidcmock`  
